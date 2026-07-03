@@ -1,0 +1,46 @@
+<div class="conversation-container">
+  <div class="messages-area" #messagesContainer>
+    <div *ngIf="filteredMessages.length === 0" class="empty-state">
+      <div class="empty-icon">💬</div>
+      <p *ngIf="!selectedAudioId">Select an audio file from the list to view its transcription</p>
+      <p *ngIf="selectedAudioId">No transcription yet. Click the 🎤 button to transcribe this audio.</p>
+    </div>
+
+    <div *ngFor="let message of filteredMessages; let i = index" class="message" [ngClass]="['message-' + message.type, 'speaker-' + (message.speaker || 'unknown')]">
+      <div *ngIf="message.type === 'audio'" class="audio-message">
+        <div class="audio-content">
+          <div class="audio-icon">🎙️</div>
+          <div class="audio-info">
+            <div class="file-name">{{ message.audioCall?.fileName }}</div>
+            <div class="file-meta">
+              <span>{{ getDisplayTime(message.timestamp) }}</span>
+            </div>
+            <app-audio-player [audioCall]="message.audioCall!" (playbackTimeUpdate)="onPlaybackTimeUpdate($event)" class="player-wrapper"></app-audio-player>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="message.type === 'transcription'" #transcriptionSegment class="transcription-message" [ngClass]="['speaker-' + (message.speaker || 'unknown'), isSegmentPlaying(i) ? 'playing' : '']">
+        <div class="message-bubble">
+          <div class="message-speaker" *ngIf="message.speaker">
+            {{ message.speaker === 'agent' ? '🎧 Agent' : '👤 Customer' }}
+          </div>
+          <div class="transcription-content">
+            {{ message.content }}
+          </div>
+          <div class="message-time">{{ getDisplayTime(message.timestamp) }}</div>
+        </div>
+      </div>
+
+      <div *ngIf="message.type === 'system'" class="system-message">
+        {{ message.content }}
+      </div>
+    </div>
+  </div>
+
+  <div class="conversation-footer">
+    <p class="phase-info">✓ Phase 2: Audio Selection & Transcription Working | Phase 3: QM Compliance Analysis</p>
+  </div>
+
+  <app-qm-checklist></app-qm-checklist>
+</div>

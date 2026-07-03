@@ -1,0 +1,53 @@
+<div class="dialog-overlay" *ngIf="isOpen">
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <h2>OpenAI API Key Required</h2>
+      <button class="close-btn" (click)="closeDialog()">✕</button>
+    </div>
+
+    <div class="dialog-body">
+      <p class="description">
+        To use the transcription feature, you need to provide your OpenAI API key.
+        Your key will be stored locally in your browser.
+      </p>
+
+      <div class="form-group">
+        <label for="apiKey">API Key (sk-...)</label>
+        <div class="input-wrapper">
+          <input
+            id="apiKey"
+            [type]="showKey ? 'text' : 'password'"
+            [(ngModel)]="apiKey"
+            placeholder="sk-..."
+            class="api-input"
+          />
+          <button class="toggle-btn" (click)="toggleShowKey()">
+            {{ showKey ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <p>
+          🔐 <strong>Security Note:</strong> Your API key is stored only in your browser's
+          localStorage and is never sent to any server except OpenAI.
+        </p>
+      </div>
+
+      <div class="instructions">
+        <p><strong>How to get an API Key:</strong></p>
+        <ol>
+          <li>Go to <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API Keys</a></li>
+          <li>Click "Create new secret key"</li>
+          <li>Copy and paste it here</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button class="btn-primary" (click)="saveApiKey()" [disabled]="!apiKey.trim()">
+        Save API Key
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <span class="logo-icon">☸️</span>
+      <span class="logo-text">ExpertFlow</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-menu">
+    <button
+      *ngFor="let item of menuItems"
+      class="menu-item"
+      [class.active]="activeMenu === item.id"
+      (click)="selectMenu(item.id)"
+    >
+      <span class="menu-icon">{{ item.icon }}</span>
+      <span class="menu-label">{{ item.label }}</span>
+    </button>
+  </nav>
+</aside>

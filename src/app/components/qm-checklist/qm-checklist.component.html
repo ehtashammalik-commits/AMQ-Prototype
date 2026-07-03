@@ -1,0 +1,137 @@
+<div class="qm-checklist-container">
+  <div *ngIf="!complianceReport && !isLoading" class="no-data">
+    <p>Select a transcribed audio file to view QM compliance analysis</p>
+    <button class="generate-btn" (click)="generateAnalysis()" [disabled]="!selectedAudioCall">
+      🔍 Generate Analysis
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <p>⏳ Analyzing compliance...</p>
+  </div>
+
+  <div *ngIf="complianceReport">
+  <div class="checklist-header">
+    <h3>📋 QM Compliance Checklist</h3>
+    <div class="overall-score" [ngClass]="complianceReport.overallScore >= 80 ? 'good' : complianceReport.overallScore >= 60 ? 'fair' : 'poor'">
+      Score: {{ complianceReport.overallScore | number: '1.0-0' }}%
+    </div>
+  </div>
+
+  <div class="checklist-items">
+    <!-- Initial Greeting -->
+    <div class="checklist-item" [ngClass]="complianceReport.items.initialGreeting.status">
+      <div class="item-status">
+        <span class="status-icon" [ngClass]="complianceReport.items.initialGreeting.status">
+          {{ getStatusIcon(complianceReport.items.initialGreeting.status) }}
+        </span>
+      </div>
+      <div class="item-content">
+        <div class="item-name">{{ complianceReport.items.initialGreeting.name }}</div>
+        <div class="item-description">{{ complianceReport.items.initialGreeting.description }}</div>
+        <div class="item-details" *ngIf="complianceReport.items.initialGreeting.details">
+          {{ complianceReport.items.initialGreeting.details }}
+        </div>
+      </div>
+      <div class="item-confidence">
+        {{ getConfidencePercentage(complianceReport.items.initialGreeting.confidence) }}%
+      </div>
+    </div>
+
+    <!-- Silence Detection -->
+    <div class="checklist-item" [ngClass]="complianceReport.items.silenceDetection.status">
+      <div class="item-status">
+        <span class="status-icon" [ngClass]="complianceReport.items.silenceDetection.status">
+          {{ getStatusIcon(complianceReport.items.silenceDetection.status) }}
+        </span>
+      </div>
+      <div class="item-content">
+        <div class="item-name">{{ complianceReport.items.silenceDetection.name }}</div>
+        <div class="item-description">{{ complianceReport.items.silenceDetection.description }}</div>
+        <div class="item-details" *ngIf="complianceReport.items.silenceDetection.details">
+          {{ complianceReport.items.silenceDetection.details }}
+        </div>
+        <div class="silence-gaps" *ngIf="complianceReport.silenceGaps.length > 0">
+          <div class="gaps-title">Silence gaps detected:</div>
+          <div class="gap-item" *ngFor="let gap of complianceReport.silenceGaps">
+            <span class="gap-time">{{ gap.startTime | number: '1.1-1' }}s - {{ gap.endTime | number: '1.1-1' }}s</span>
+            <span class="gap-duration">({{ gap.duration | number: '1.1-1' }}s)</span>
+          </div>
+        </div>
+      </div>
+      <div class="item-confidence">
+        {{ getConfidencePercentage(complianceReport.items.silenceDetection.confidence) }}%
+      </div>
+    </div>
+
+    <!-- Location Information -->
+    <div class="checklist-item" [ngClass]="complianceReport.items.locationInformation.status">
+      <div class="item-status">
+        <span class="status-icon" [ngClass]="complianceReport.items.locationInformation.status">
+          {{ getStatusIcon(complianceReport.items.locationInformation.status) }}
+        </span>
+      </div>
+      <div class="item-content">
+        <div class="item-name">{{ complianceReport.items.locationInformation.name }}</div>
+        <div class="item-description">{{ complianceReport.items.locationInformation.description }}</div>
+        <div class="item-details" *ngIf="complianceReport.items.locationInformation.details">
+          {{ complianceReport.items.locationInformation.details }}
+        </div>
+      </div>
+      <div class="item-confidence">
+        {{ getConfidencePercentage(complianceReport.items.locationInformation.confidence) }}%
+      </div>
+    </div>
+
+    <!-- Incident Information -->
+    <div class="checklist-item" [ngClass]="complianceReport.items.incidentInformation.status">
+      <div class="item-status">
+        <span class="status-icon" [ngClass]="complianceReport.items.incidentInformation.status">
+          {{ getStatusIcon(complianceReport.items.incidentInformation.status) }}
+        </span>
+      </div>
+      <div class="item-content">
+        <div class="item-name">{{ complianceReport.items.incidentInformation.name }}</div>
+        <div class="item-description">{{ complianceReport.items.incidentInformation.description }}</div>
+        <div class="item-details" *ngIf="complianceReport.items.incidentInformation.details">
+          {{ complianceReport.items.incidentInformation.details }}
+        </div>
+      </div>
+      <div class="item-confidence">
+        {{ getConfidencePercentage(complianceReport.items.incidentInformation.confidence) }}%
+      </div>
+    </div>
+
+    <!-- Medical/Emergency Information -->
+    <div class="checklist-item" [ngClass]="complianceReport.items.medicalEmergencyInformation.status">
+      <div class="item-status">
+        <span class="status-icon" [ngClass]="complianceReport.items.medicalEmergencyInformation.status">
+          {{ getStatusIcon(complianceReport.items.medicalEmergencyInformation.status) }}
+        </span>
+      </div>
+      <div class="item-content">
+        <div class="item-name">{{ complianceReport.items.medicalEmergencyInformation.name }}</div>
+        <div class="item-description">{{ complianceReport.items.medicalEmergencyInformation.description }}</div>
+        <div class="item-details" *ngIf="complianceReport.items.medicalEmergencyInformation.details">
+          {{ complianceReport.items.medicalEmergencyInformation.details }}
+        </div>
+      </div>
+      <div class="item-confidence">
+        {{ getConfidencePercentage(complianceReport.items.medicalEmergencyInformation.confidence) }}%
+      </div>
+    </div>
+  </div>
+
+    <!-- Call Metrics -->
+    <div class="call-metrics">
+      <div class="metric">
+        <span class="metric-label">Call Duration:</span>
+        <span class="metric-value">{{ formatDuration(complianceReport.totalCallDuration) }}</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Total Silence:</span>
+        <span class="metric-value">{{ formatDuration(complianceReport.totalSilenceDuration) }}</span>
+      </div>
+    </div>
+  </div>
+</div>

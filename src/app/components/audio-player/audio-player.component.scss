@@ -1,0 +1,103 @@
+.audio-player {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .player-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .play-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+
+      &:hover {
+        opacity: 0.9;
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      &.playing {
+        background: var(--secondary-color);
+      }
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background-color: var(--border-color);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+
+      .progress {
+        height: 100%;
+        background-color: var(--primary-color);
+        border-radius: 2px;
+        transition: width 0.1s linear;
+      }
+    }
+
+    .time-info {
+      font-size: 12px;
+      color: var(--text-gray);
+      white-space: nowrap;
+      min-width: 70px;
+      text-align: right;
+    }
+  }
+
+  .transcribe-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    &:active:not(:disabled) {
+      opacity: 0.8;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.loading {
+      animation: pulse 1.5s infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

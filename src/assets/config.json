@@ -1,0 +1,25 @@
+{
+  "transcriptionProvider": "elevenlabs",
+  "_comment": "Active Provider: elevenlabs | Available: elevenlabs, openai",
+  "elevenlabs": {
+    "apiKey": "sk_451d39bfc249fc24f1c6f8c7d31f96c61ad866adcf274861",
+    "model": "scribe_v2",
+    "transcriptionLanguage": "ar",
+    "enableDiarization": true
+  },
+  "openai": {
+    "apiKey": "sk-your-api-key-here",
+    "model": "gpt-4o-transcribe-diarize",
+    "transcriptionLanguage": "ar"
+  },
+  "app": {
+    "name": "QM Transcription App",
+    "version": "1.0.0"
+  },
+  "features": {
+    "audioPlayback": true,
+    "transcription": true,
+    "silenceDetection": false,
+    "qmForm": false
+  }
+}

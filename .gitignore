@@ -1,0 +1,27 @@
+# Node
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Build
+dist/
+out-tsc/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Storage
+*.log
+.angular/cache/
+node_modules/
