@@ -1,53 +1,133 @@
 <div class="dialog-overlay" *ngIf="isOpen">
   <div class="dialog-content">
     <div class="dialog-header">
-      <h2>OpenAI API Key Required</h2>
+      <h2>🔑 Configure Your API Keys</h2>
       <button class="close-btn" (click)="closeDialog()">✕</button>
+    </div>
+    <div class="info-banner">
+      <p>🎯 To use QM Transcription, you need to provide your own API keys from ElevenLabs and OpenAI. Keys are stored securely in your browser only.</p>
+    </div>
+
+    <div class="tabs">
+      <button
+        class="tab"
+        [class.active]="apiKeyTab === 'transcription'"
+        (click)="apiKeyTab = 'transcription'"
+      >
+        🎤 Transcription (ElevenLabs)
+      </button>
+      <button
+        class="tab"
+        [class.active]="apiKeyTab === 'analysis'"
+        (click)="apiKeyTab = 'analysis'"
+      >
+        🤖 QM Analysis (OpenAI)
+      </button>
     </div>
 
     <div class="dialog-body">
-      <p class="description">
-        To use the transcription feature, you need to provide your OpenAI API key.
-        Your key will be stored locally in your browser.
-      </p>
+      <!-- Transcription API Key Tab -->
+      <div *ngIf="apiKeyTab === 'transcription'" class="tab-content">
+        <p class="description">
+          <strong>🎤 Transcription Model (ElevenLabs)</strong><br>
+          Converts your audio recordings to text. Used to transcribe customer service calls in Arabic.
+        </p>
 
-      <div class="form-group">
-        <label for="apiKey">API Key (sk-...)</label>
-        <div class="input-wrapper">
-          <input
-            id="apiKey"
-            [type]="showKey ? 'text' : 'password'"
-            [(ngModel)]="apiKey"
-            placeholder="sk-..."
-            class="api-input"
-          />
-          <button class="toggle-btn" (click)="toggleShowKey()">
-            {{ showKey ? '👁️' : '👁️‍🗨️' }}
+        <div class="form-group">
+          <label for="transcriptionKey">ElevenLabs API Key</label>
+          <div class="input-wrapper">
+            <input
+              id="transcriptionKey"
+              [type]="showTranscriptionKey ? 'text' : 'password'"
+              [(ngModel)]="transcriptionApiKey"
+              placeholder="xi_..."
+              class="api-input"
+            />
+            <button class="toggle-btn" (click)="showTranscriptionKey = !showTranscriptionKey">
+              {{ showTranscriptionKey ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <p>
+            🔐 <strong>Security:</strong> API key stored locally in browser. Never shared externally.
+          </p>
+        </div>
+
+        <div class="instructions">
+          <p><strong>Get ElevenLabs API Key:</strong></p>
+          <ol>
+            <li>Go to <a href="https://elevenlabs.io" target="_blank">ElevenLabs.io</a></li>
+            <li>Sign up or log in</li>
+            <li>Get your API key from account settings</li>
+            <li>Paste it here</li>
+          </ol>
+        </div>
+
+        <div class="dialog-footer">
+          <button class="btn-primary" (click)="saveTranscriptionApiKey()" [disabled]="!transcriptionApiKey.trim()">
+            Save Transcription Key
           </button>
         </div>
       </div>
 
-      <div class="info-box">
-        <p>
-          🔐 <strong>Security Note:</strong> Your API key is stored only in your browser's
-          localStorage and is never sent to any server except OpenAI.
+      <!-- Analysis API Key Tab -->
+      <div *ngIf="apiKeyTab === 'analysis'" class="tab-content">
+        <p class="description">
+          <strong>🤖 Analysis Model (OpenAI GPT-4o)</strong><br>
+          Intelligently analyzes transcriptions to evaluate QM compliance criteria using advanced AI.
         </p>
-      </div>
 
-      <div class="instructions">
-        <p><strong>How to get an API Key:</strong></p>
-        <ol>
-          <li>Go to <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API Keys</a></li>
-          <li>Click "Create new secret key"</li>
-          <li>Copy and paste it here</li>
-        </ol>
-      </div>
-    </div>
+        <div class="form-group">
+          <label for="analysisKey">OpenAI API Key (sk-...)</label>
+          <div class="input-wrapper">
+            <input
+              id="analysisKey"
+              [type]="showAnalysisKey ? 'text' : 'password'"
+              [(ngModel)]="openaiAnalysisApiKey"
+              placeholder="sk-..."
+              class="api-input"
+            />
+            <button class="toggle-btn" (click)="showAnalysisKey = !showAnalysisKey">
+              {{ showAnalysisKey ? '👁️' : '👁️‍🗨️' }}
+            </button>
+          </div>
+        </div>
 
-    <div class="dialog-footer">
-      <button class="btn-primary" (click)="saveApiKey()" [disabled]="!apiKey.trim()">
-        Save API Key
-      </button>
+        <div class="info-box">
+          <p>
+            🔐 <strong>Security:</strong> API key stored locally in browser. Never shared externally.
+          </p>
+        </div>
+
+        <div class="feature-info">
+          <p><strong>✨ LLM-Powered Analysis Features:</strong></p>
+          <ul>
+            <li>Intelligent greeting detection</li>
+            <li>Smart silence gap analysis</li>
+            <li>Semantic understanding of location requests</li>
+            <li>Context-aware incident information assessment</li>
+            <li>Medical/emergency information verification</li>
+            <li>Overall call quality scoring</li>
+          </ul>
+        </div>
+
+        <div class="instructions">
+          <p><strong>Get OpenAI API Key:</strong></p>
+          <ol>
+            <li>Go to <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API Keys</a></li>
+            <li>Click "Create new secret key"</li>
+            <li>Copy and paste it here</li>
+          </ol>
+        </div>
+
+        <div class="dialog-footer">
+          <button class="btn-primary" (click)="saveAnalysisApiKey()" [disabled]="!openaiAnalysisApiKey.trim()">
+            Save Analysis Key
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

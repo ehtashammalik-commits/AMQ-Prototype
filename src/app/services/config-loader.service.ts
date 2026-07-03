@@ -26,6 +26,7 @@ export class ConfigLoaderService {
             openaiEnabled: !!config.openai?.apiKey && config.openai.apiKey !== 'sk-your-api-key-here'
           });
 
+          // Load ElevenLabs config (for transcription if selected)
           if (config.elevenlabs) {
             console.log('[ConfigLoaderService] Applying ElevenLabs configuration:', {
               model: config.elevenlabs.model,
@@ -40,10 +41,14 @@ export class ConfigLoaderService {
               enableDiarization: config.elevenlabs.enableDiarization
             });
 
-            console.log('[ConfigLoaderService] ✓ Configuration applied');
-          } else if (config.openai) {
+            console.log('[ConfigLoaderService] ✓ ElevenLabs configuration applied');
+          }
+
+          // Load OpenAI config (for analysis OR transcription)
+          if (config.openai) {
             console.log('[ConfigLoaderService] Applying OpenAI configuration:', {
-              model: config.openai.model,
+              transcriptionModel: config.openai.model,
+              analysisModel: config.openai.analysisModel,
               language: config.openai.transcriptionLanguage,
               apiKeySet: !!config.openai.apiKey
             });
@@ -51,11 +56,14 @@ export class ConfigLoaderService {
             this.configService.setOpenAIConfig({
               apiKey: config.openai.apiKey,
               model: config.openai.model,
-              transcriptionLanguage: config.openai.transcriptionLanguage
+              transcriptionLanguage: config.openai.transcriptionLanguage,
+              analysisModel: config.openai.analysisModel
             });
 
-            console.log('[ConfigLoaderService] ✓ Configuration applied');
-          } else {
+            console.log('[ConfigLoaderService] ✓ OpenAI configuration applied');
+          }
+
+          if (!config.elevenlabs && !config.openai) {
             console.warn('[ConfigLoaderService] ⚠️ No transcription config found in config.json');
           }
 

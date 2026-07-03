@@ -6,6 +6,7 @@ export interface OpenAIConfig {
   apiKey: string;
   model: string;
   transcriptionLanguage: string;
+  analysisModel?: string;
 }
 
 export interface ElevenLabsConfig {

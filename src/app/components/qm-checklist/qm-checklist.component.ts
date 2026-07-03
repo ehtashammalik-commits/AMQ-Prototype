@@ -16,6 +16,7 @@ export class QmChecklistComponent implements OnInit {
   complianceReport: QMComplianceReport | null = null;
   isLoading = false;
   selectedAudioCall: any = null;
+  private previousAudioCallId: string | null = null;
 
   constructor(
     private audioService: AudioService,
@@ -26,10 +27,14 @@ export class QmChecklistComponent implements OnInit {
     console.log('[QMChecklist] Component initialized');
 
     this.audioService.selectedAudioCall$.subscribe(selectedAudioCall => {
-      this.selectedAudioCall = selectedAudioCall;
-      if (!selectedAudioCall) {
+      // Clear analysis whenever file selection changes
+      if (selectedAudioCall?.id !== this.previousAudioCallId) {
+        console.log('[QMChecklist] Audio file changed, clearing analysis');
         this.complianceReport = null;
+        this.previousAudioCallId = selectedAudioCall?.id || null;
       }
+
+      this.selectedAudioCall = selectedAudioCall;
     });
   }
 
@@ -82,13 +87,18 @@ export class QmChecklistComponent implements OnInit {
     this.isLoading = true;
     console.log('[QMChecklist] Analyzing compliance for audio:', audioId);
 
-    try {
-      this.complianceReport = this.qmComplianceService.analyzeTranscription(transcription, audioId);
-      this.isLoading = false;
-    } catch (error) {
-      console.error('[QMChecklist] Error analyzing compliance:', error);
-      this.isLoading = false;
-    }
+    this.qmComplianceService.analyzeTranscriptionWithLLM(transcription, audioId).subscribe({
+      next: (report) => {
+        this.complianceReport = report;
+        this.isLoading = false;
+        console.log('[QMChecklist] Analysis complete:', report);
+      },
+      error: (error) => {
+        console.error('[QMChecklist] Error analyzing compliance:', error);
+        alert(`Analysis failed: ${error.message}`);
+        this.isLoading = false;
+      }
+    });
   }
 
   getStatusIcon(status: string): string {

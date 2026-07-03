@@ -1,20 +1,22 @@
 {
   "transcriptionProvider": "elevenlabs",
-  "_comment": "Active Provider: elevenlabs | Available: elevenlabs, openai",
+  "_comment": "QM Transcription App - Users provide API keys via Settings dialog",
   "elevenlabs": {
-    "apiKey": "sk_451d39bfc249fc24f1c6f8c7d31f96c61ad866adcf274861",
+    "apiKey": "",
     "model": "scribe_v2",
     "transcriptionLanguage": "ar",
     "enableDiarization": true
   },
   "openai": {
-    "apiKey": "sk-your-api-key-here",
+    "apiKey": "",
     "model": "gpt-4o-transcribe-diarize",
-    "transcriptionLanguage": "ar"
+    "transcriptionLanguage": "ar",
+    "analysisModel": "gpt-4o"
   },
   "app": {
     "name": "QM Transcription App",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "description": "Users must provide their own API keys via Settings (⚙️)"
   },
   "features": {
     "audioPlayback": true,

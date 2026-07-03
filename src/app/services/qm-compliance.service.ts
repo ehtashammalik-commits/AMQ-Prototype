@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { DiarizedTranscription, SpeakerSegment } from '../models/transcription.model';
 import { ComplianceItem, QMComplianceReport, SilenceGap } from '../models/qm-compliance.model';
+import { OpenaiQmAnalysisService } from './openai-qm-analysis.service';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +15,18 @@ export class QmComplianceService {
   private incidentKeywords = ['حادث', 'مشكلة', 'قضية', 'ما حدث', 'وقع', 'حدث', 'الحالة'];
   private medicalKeywords = ['إصابة', 'طوارئ', 'إسعاف', 'طبي', 'نزيف', 'ألم', 'تنفس', 'جرح', 'طبية'];
 
-  constructor() {}
+  constructor(
+    private openaiAnalysisService: OpenaiQmAnalysisService,
+    private configService: ConfigService
+  ) {}
+
+  analyzeTranscriptionWithLLM(
+    transcription: DiarizedTranscription,
+    audioId: string
+  ): Observable<QMComplianceReport> {
+    console.log('[QMComplianceService] Using LLM-based analysis');
+    return this.openaiAnalysisService.analyzeTranscriptionWithLLM(transcription, audioId);
+  }
 
   analyzeTranscription(
     transcription: DiarizedTranscription,

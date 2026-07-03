@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranscriptionService } from '../../services/transcription.service';
+import { UiEventsService } from '../../services/ui-events.service';
 
 @Component({
   selector: 'app-api-key-dialog',
@@ -11,49 +12,51 @@ import { TranscriptionService } from '../../services/transcription.service';
   styleUrls: ['./api-key-dialog.component.scss']
 })
 export class ApiKeyDialogComponent implements OnInit {
-  apiKey = '';
+  transcriptionApiKey = '';
+  openaiAnalysisApiKey = '';
   isOpen = false;
-  showKey = false;
+  showTranscriptionKey = false;
+  showAnalysisKey = false;
+  apiKeyTab: 'transcription' | 'analysis' = 'transcription';
 
-  constructor(private transcriptionService: TranscriptionService) {}
+  constructor(
+    private transcriptionService: TranscriptionService,
+    private uiEvents: UiEventsService
+  ) {}
 
   ngOnInit(): void {
     console.log('[ApiKeyDialog] Component initialized');
-    this.checkApiKey();
+    this.uiEvents.openApiKeyDialog$.subscribe(tab => {
+      this.openDialog(tab);
+    });
   }
 
-  checkApiKey(): void {
-    const hasApiKey = this.transcriptionService.isApiKeySet();
-    console.log('[ApiKeyDialog] Checking API key...', { apiKeySet: hasApiKey });
+  openDialog(tab: 'transcription' | 'analysis' = 'transcription'): void {
+    console.log('[ApiKeyDialog] Opening dialog for tab:', tab);
+    this.isOpen = true;
+    this.apiKeyTab = tab;
+  }
 
-    if (!hasApiKey) {
-      console.log('[ApiKeyDialog] No API key found - showing dialog');
-      this.isOpen = true;
+  saveTranscriptionApiKey(): void {
+    if (this.transcriptionApiKey.trim()) {
+      console.log('[ApiKeyDialog] Saving transcription API key...');
+      this.transcriptionService.setElevenLabsApiKey(this.transcriptionApiKey.trim());
+      this.transcriptionApiKey = '';
+      alert('Transcription API key saved successfully!');
     } else {
-      console.log('[ApiKeyDialog] ✓ API key is already set');
-      this.isOpen = false;
+      alert('Please enter a valid transcription API key');
     }
   }
 
-  saveApiKey(): void {
-    if (this.apiKey.trim()) {
-      console.log('[ApiKeyDialog] Saving API key...', {
-        keyLength: this.apiKey.length,
-        keyPrefix: this.apiKey.substring(0, 10)
-      });
-
-      this.transcriptionService.setElevenLabsApiKey(this.apiKey.trim());
-      this.isOpen = false;
-
-      console.log('[ApiKeyDialog] ✓ API key saved successfully');
+  saveAnalysisApiKey(): void {
+    if (this.openaiAnalysisApiKey.trim()) {
+      console.log('[ApiKeyDialog] Saving OpenAI analysis API key...');
+      this.transcriptionService.setOpenAIApiKey(this.openaiAnalysisApiKey.trim());
+      this.openaiAnalysisApiKey = '';
+      alert('OpenAI API key saved successfully! QM analysis will now use LLM.');
     } else {
-      console.warn('[ApiKeyDialog] ⚠️ Empty API key provided');
-      alert('Please enter a valid API key');
+      alert('Please enter a valid OpenAI API key');
     }
-  }
-
-  toggleShowKey(): void {
-    this.showKey = !this.showKey;
   }
 
   closeDialog(): void {

@@ -14,12 +14,13 @@ export const environment = {
     enableDiarization: true
   },
 
-  // OpenAI Configuration (fallback)
+  // OpenAI Configuration (transcription and analysis)
   openai: {
     apiEndpoint: 'https://api.openai.com/v1',
     apiKey: '',
     model: 'gpt-4o-transcribe-diarize',
-    transcriptionLanguage: 'ar'
+    transcriptionLanguage: 'ar',
+    analysisModel: 'gpt-4o'
   },
 
   features: {

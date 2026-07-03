@@ -15,10 +15,13 @@ build/
 *~
 .DS_Store
 
-# Environment
+# Secrets & Environment (NEVER COMMIT API KEYS!)
 .env
 .env.local
 .env.*.local
+config.local.json
+config.*.json
+!config.example.json
 
 # Storage
 *.log

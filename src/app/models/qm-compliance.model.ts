@@ -28,4 +28,5 @@ export interface QMComplianceReport {
   totalSilenceDuration: number;
   totalCallDuration: number;
   overallScore: number;
+  summary?: string;
 }
