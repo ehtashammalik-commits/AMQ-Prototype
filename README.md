@@ -42,6 +42,31 @@ Before using the app, you'll need **2 API keys** (both free tier available):
 
 ---
 
+## 🗺️ Project Roadmap
+
+### **Phase Completion Status**
+
+| Phase | Status | Description | Details |
+|-------|--------|-------------|---------|
+| **Phase 1** | ✅ Complete | Core Structure & File Upload | [Phase 1 README](PHASE1_README.md) |
+| **Phase 2** | ✅ Complete | Audio Playback & Transcription | Audio player, ElevenLabs integration |
+| **Phase 3** | ✅ Complete | QM Analysis with LLM | GPT-4o powered compliance evaluation |
+| **Phase 3.1** | 📋 Planned | ExpertFlow CIM Integration | Push transcriptions to ExpertFlow API |
+
+### **Phase 3.1 - Coming Soon** 🚀
+Push transcriptions directly to ExpertFlow's Conversation Information Manager (CIM)
+
+**Features:**
+- 🆔 Unique Conversation ID per audio file
+- 📤 Push button on each transcription message
+- 👥 Select message type (Agent/Customer)
+- 🔗 Direct integration with ExpertFlow CIM API
+- ✅ Success/error feedback
+
+[👉 View Full Phase 3.1 Roadmap](PHASE3_1_ROADMAP.md)
+
+---
+
 ## 📋 Full Usage Guide
 
 ### **Step 1️⃣: Get Your API Keys**
